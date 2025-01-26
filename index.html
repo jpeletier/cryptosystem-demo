@@ -78,7 +78,6 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
             font-weight: normal;
             font-size: 1em;
-            width: 35em;
             text-align: justify;
         }
 
@@ -86,7 +85,6 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
             font-weight: normal;
             font-size: 1em;
-            width: 37em;
             text-align: justify;
         }
 
@@ -106,29 +104,47 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             width: 3em;
         }
 
+        .tab-container {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ccc;
+        }
+
         .tab {
-            display: none;
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border-radius: 10px 10px 0 0;
+            transition: background-color 0.3s;
         }
 
         .tab.active {
+            background-color: #0078d7;
+            color: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-content.active {
             display: block;
-        }
-
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1em;
-        }
-
-        .tab-buttons button {
-            margin: 0 1em;
-            padding: 0.5em 1em;
-            cursor: pointer;
         }
 
         .language-selector {
             display: flex;
-            justify-content: center;
+            justify-content: right;
             margin-bottom: 1em;
         }
 
@@ -154,38 +170,6 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
 
         // The algorithms used are based on a fixed permutation network and a
         // shift cipher that rotates over the 95 printable ASCII characters.
-
-        function check_javascript_is_enabled() {
-            document.getElementById('div_please_enable_javascript').style.display =
-                "none";
-        }
-
-        const validLanguages = ["en", "es"];
-        const defaultLanguage = "en";
-
-        function getLanguageCode() {
-            // Get the browser's language (e.g., 'en', 'es-ES', 'es-MX')
-            const browserLanguage = navigator.language || navigator.userLanguage;
-
-            // Extract the primary language code (e.g., 'es' from 'es-ES')
-            const lang = browserLanguage.split("-")[0];
-
-            // Check if the primary language is in the validLanguages list
-            if (validLanguages.includes(lang)) {
-                return lang;
-            }
-
-            // Return the default language if no match is found
-            return defaultLanguage;
-        }
-
-        function init() {
-            check_javascript_is_enabled();
-            var lang = getLanguageCode();
-            switchLanguage(lang);
-            document.getElementById('language').value = lang;
-        }
-
 
         var permutation = [0, 13, 26, 39, 52, 65, 78, 91, 7, 20, 33, 46, 59, 72, 85,
             1, 14, 27, 40, 53, 66, 79, 92, 8, 21, 34, 47, 60, 73, 86, 2, 15, 28, 41,
@@ -349,12 +333,32 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             document.pk.verified_message.value =
                 shift_permute(ciphertext, shift_amount);
         }
+    </script>
+    <script type="text/javascript">
+        /* User interface */
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.getElementById(tabId).classList.add('active');
+        function check_javascript_is_enabled() {
+            document.getElementById('div_please_enable_javascript').style.display =
+                "none";
+        }
+
+        const validLanguages = ["en", "es"];
+        const defaultLanguage = "en";
+
+        function getLanguageCode() {
+            // Get the browser's language (e.g., 'en', 'es-ES', 'es-MX')
+            const browserLanguage = navigator.language || navigator.userLanguage;
+
+            // Extract the primary language code (e.g., 'es' from 'es-ES')
+            const lang = browserLanguage.split("-")[0];
+
+            // Check if the primary language is in the validLanguages list
+            if (validLanguages.includes(lang)) {
+                return lang;
+            }
+
+            // Return the default language if no match is found
+            return defaultLanguage;
         }
 
         function switchLanguage(lang) {
@@ -381,18 +385,51 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+        });
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to the clicked tab and corresponding content
+                    tab.classList.add('active');
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+        }
+
+        function initLanguages() {
+            var lang = getLanguageCode();
+            switchLanguage(lang);
+            document.getElementById('language').value = lang;
+        }
+
+        function init() {
+            check_javascript_is_enabled();
+            initLanguages();
+            initTabs();
+        }
     </script>
 </head>
 
 <body onload="init();">
+    <div class="language-selector">
+        <label for="language" style="padding-top: 5px">Language:&nbsp;</label>
+        <select id="language" onchange="switchLanguage(this.value)">
+            <option value="en" selected>English</option>
+            <option value="es">Español</option>
+        </select>
+    </div>
     <div class="centered">
-        <div class="language-selector">
-            <label for="language">Language:&nbsp;</label>
-            <select id="language" onchange="switchLanguage(this.value)">
-                <option value="es" selected>Español</option>
-                <option value="en">English</option>
-            </select>
-        </div>
         <div>
             <h1 class="lang-en">Cryptosystem Demo</h1>
             <h1 class="lang-es">Demostración de Criptosistema</h1>
@@ -415,691 +452,712 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
                     un criptosistema real.</i>
             </p>
         </div>
-        <div class="tab-buttons">
-            <button onclick="switchTab('symmetric-key')"><span class="lang-en">Symmetric-Key Encryption</span><span
-                    class="lang-es">Cifrado de clave simétrica</span></button>
-            <button onclick="switchTab('public-key')"><span class="lang-en">Public-Key Encryption</span><span
-                    class="lang-es">Cifrado de clave pública</span></button>
-        </div>
-        <div id="symmetric-key" class="tab active">
-            <div align="left" id="div_please_enable_javascript" style="width: 36em;
+        <div align="left" id="div_please_enable_javascript" style="width: 36em;
 display: block; background-color: #aa0000; padding: 3px; color: #FFFFFF;
 text-align: center; margin-left: auto; margin-right: auto;">Javascript is
-                disabled. Please enable Javscript for the buttons below to work.</div>
-            <form name="sk" action="./index.html">
+            disabled. Please enable Javscript for the buttons below to work.</div>
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="1"><span class="lang-en">Symmetric-Key Encryption</span><span
+                        class="lang-es">Cifrado de clave simétrica</span></div>
+                <div class="tab" data-tab="2"><span class="lang-en">Public-Key Encryption</span><span
+                        class="lang-es">Cifrado de clave pública</span></div>
+            </div>
+            <div class="tab-content active" id="tab-1">
+                <form name="sk" action="./index.html">
 
-                <table border="0">
-                    <tr>
-                        <td style="background-color: #87CEFA;">
-                            <h2 class="lang-en">Symmetric-Key Encryption</h2>
-                            <h2 class="lang-es">Cifrado de Clave Simétrica</h2>
-                            <p class="lang-en">
-                                Like traditional door locks that use one key for both locking and
-                                unlocking a door, Symmetric-Key Encryption uses one
-                                key for both encrypting and decrypting a message.
-                            </p>
-                            <p class="lang-es">
-                                Como las cerraduras tradicionales que usan una llave para cerrar y
-                                abrir una puerta, el Cifrado de Clave Simétrica usa una
-                                llave para cifrar y descifrar un mensaje.
-                            </p>
-                            <p class="lang-en">
-                                Follow these steps to send a secret message to someone.
-                                First, think who you want to send a message to.
-                                It needs to be someone whom you can securely send a Symmetric Key to.
-                                (That's one of the disadvantages of Symmetric-Key Encryption:
-                                you need to find a secure way to distribute your Symmetric Key before you
-                                can send a message!)
-                            </p>
-                            <p class="lang-es">
-                                Sigue estos pasos para enviar un mensaje secreto a alguien.
-                                Primero, piensa a quién quieres enviar un mensaje.
-                                Debe ser alguien a quien puedas enviar una Clave Simétrica de forma segura.
-                                (Esa es una de las desventajas del Cifrado de Clave Simétrica:
-                                necesitas encontrar una forma segura de distribuir tu Clave Simétrica antes de
-                                poder enviar un mensaje!)
-                            </p>
-                            <h3 class="lang-en">Step 1: Generate a Symmetric Key</h3>
-                            <h3 class="lang-es">Paso 1: Generar una Clave Simétrica</h3>
-                            <p class="lang-en">
-                                The first step in sending a secret message is to generate a
-                                Symmetric Key. Do this by pressing the button below.
-                            </p>
-                            <p class="lang-es">
-                                El primer paso para enviar un mensaje secreto es generar una
-                                Clave Simétrica. Haz esto presionando el botón de abajo.
-                            </p>
-                            <center>
-                                <input type="button" id="generate_symmetric_key" name="generate_symmetric_key"
-                                    value="Generate a Symmetric Key" data-lang-en="Generate a Symmetric Key"
-                                    data-lang-es="Generar una Clave Simétrica"
-                                    onclick="generate_symmetric_key_action()" /><input type="text" class="key"
-                                    id="generated_symmetric_key" name="generated_symmetric_key" />
-                            </center>
-                            <p class="lang-en">
-                                You and the recipient of your secret message both will use this key, and so
-                                you need to securely send it to the recipient of your message.
-                                But since this is just a demo, you can send this Symmetric Key any
-                                way you like.
-                                Normally, you <i>never</i> would use email to send a Symmetric Key!
-                            </p>
-                            <p class="lang-es">
-                                Tú y el destinatario de tu mensaje secreto usarán esta clave, por lo que
-                                necesitas enviarla de forma segura al destinatario de tu mensaje.
-                                Pero como esto es solo una demostración, puedes enviar esta Clave Simétrica de cualquier
-                                manera que desees.
-                                Normalmente, <i>nunca</i> usarías el correo electrónico para enviar una Clave Simétrica!
-                            </p>
-                            <h3 class="lang-en">Step 2: Encrypt a Message</h3>
-                            <h3 class="lang-es">Paso 2: Cifrar un Mensaje</h3>
-                            <p class="lang-en">
-                                Here's how to encrypt a message before sending it to someone else.
-                                If you just <i>received</i> a message,
-                                then follow the next step instead.
-                                We call your message the <i>plaintext</i>. Enter the plaintext of your
-                                message and your Symmetric Key. Then press
-                                the button to encrypt the plaintext of your message into
-                                its <i>ciphertext</i>.
-                            </p>
-                            <p class="lang-es">
-                                Aquí te mostramos cómo cifrar un mensaje antes de enviarlo a otra persona.
-                                Si acabas de <i>recibir</i> un mensaje,
-                                sigue el siguiente paso en su lugar.
-                                Llamamos a tu mensaje el <i>texto plano</i>. Ingresa el texto plano de tu
-                                mensaje y tu Clave Simétrica. Luego presiona
-                                el botón para cifrar el texto plano de tu mensaje en
-                                su <i>texto cifrado</i>.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label
-                                                for="plaintext_for_encryption_using_symmetric_key"><span
-                                                    class="lang-en">Plaintext
-                                                    of Message:</span><span class="lang-es">Texto plano del
-                                                    mensaje:</span></label></td>
-                                        <td class="left"><input type="text" class="message"
-                                                id="plaintext_for_encryption_using_symmetric_key"
-                                                name="plaintext_for_encryption_using_symmetric_key" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="symmetric_key_for_encryption"><span
-                                                    class="lang-en">Symmetric
-                                                    Key:</span><span class="lang-es">Clave Simétrica:</span></label>
-                                        </td>
-                                        <td class="left"><input type="text" class="key"
-                                                id="symmetric_key_for_encryption" name="symmetric_key_for_encryption" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="encrypt_using_symmetric_key"
-                                                name="encrypt_using_symmetric_key" value="Encrypt Using Symmetric Key"
-                                                data-lang-en="Encrypt Using Symmetric Key"
-                                                data-lang-es="Cifrar usando Clave Simétrica"
-                                                onclick="encrypt_using_symmetric_key_action()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label
-                                                for="ciphertext_of_encryption_using_symmetric_key"><span
-                                                    class="lang-en">Ciphertext
-                                                    of Message:</span><span class="lang-es">Texto cifrado del
-                                                    mensaje:</span></label></td>
-                                        <td class="left"><input type="text" class="message"
-                                                id="ciphertext_of_encryption_using_symmetric_key"
-                                                name="ciphertext_of_encryption_using_symmetric_key" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                Send the ciphertext to your recipient. They will follow Step 3
-                                to decrypt the ciphertext using the shared Symmetric Key
-                                that you and they already have.
-                            </p>
-                            <p class="lang-es">
-                                Envía el texto cifrado a tu destinatario. Ellos seguirán el Paso 3
-                                para descifrar el texto cifrado usando la Clave Simétrica compartida
-                                que tú y ellos ya tienen.
-                            </p>
-                            <h3 class="lang-en">Step 3: Decrypt a Message</h3>
-                            <h3 class="lang-es">Paso 3: Descifrar un Mensaje</h3>
-                            <p class="lang-en">
-                                Did you just receive a message from someone else? Then follow this
-                                step. <i>If you are sending a message,
-                                    then follow the previous step instead.</i>
-                                Here you decrypt the message using the Symmetric Key.
-                                We call the encrypted message the <i>ciphertext</i>. Enter the ciphertext
-                                of the message followed by your Symmetric Key, and press
-                                the button to decrypt the ciphertext of the message into plaintext.
-                            </p>
-                            <p class="lang-es">
-                                ¿Acabas de recibir un mensaje de otra persona? Entonces sigue este
-                                paso. <i>Si estás enviando un mensaje,
-                                    sigue el paso anterior en su lugar.</i>
-                                Aquí descifras el mensaje usando la Clave Simétrica.
-                                Llamamos al mensaje cifrado el <i>texto cifrado</i>. Ingresa el texto cifrado
-                                del mensaje seguido de tu Clave Simétrica, y presiona
-                                el botón para descifrar el texto cifrado del mensaje en texto plano.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label
-                                                for="ciphertext_for_decryption_using_symmetric_key"><span
-                                                    class="lang-en">Ciphertext
-                                                    of Message:</span><span class="lang-es">Texto cifrado del
-                                                    mensaje:</span></label></td>
-                                        <td class="left"><input type="text" class="message"
-                                                id="ciphertext_for_decryption_using_symmetric_key"
-                                                name="ciphertext_for_decryption_using_symmetric_key" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="symmetric_key_for_decryption"><span
-                                                    class="lang-en">Symmetric
-                                                    Key:</span><span class="lang-es">Clave Simétrica:</span></label>
-                                        </td>
-                                        <td class="left"><input type="text" class="key"
-                                                id="symmetric_key_for_decryption" name="symmetric_key_for_decryption" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="decrypt_using_symmetric_key"
-                                                name="decrypt_using_symmetric_key" value="Decrypt Using Symmetric Key"
-                                                data-lang-en="Decrypt Using Symmetric Key"
-                                                data-lang-es="Descifrar usando Clave Simétrica"
-                                                onclick="decrypt_using_symmetric_key_action()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="plaintext_of_decryption_using_symmetric_key"><span
-                                                    class="lang-en">Plaintext
-                                                    of Message:</span><span class="lang-es">Texto plano del
-                                                    mensaje:</span></label></td>
-                                        <td class="left"><input type="text" class="message"
-                                                id="plaintext_of_decryption_using_symmetric_key"
-                                                name="plaintext_of_decryption_using_symmetric_key" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <br />
-                        </td>
-                    </tr>
-                </table>
-                <h3 class="lang-en">Practice</h3>
-                <h3 class="lang-es">Práctica</h3>
-                <p class="lang-en">
-                    1. Generate a Symmetric Key and share it with a friend.
-                </p>
-                <p class="lang-es">
-                    1. Genera una Clave Simétrica y compártela con un amigo.
-                </p>
-                <p class="lang-en">
-                    2. Using your shared Symmetric Key, see if you and your friend
-                    can send and read short encrypted emails by copying and pasting
-                    text with Steps 2 and 3 above.
-                </p>
-                <p class="lang-es">
-                    2. Usando tu Clave Simétrica compartida, ve si tú y tu amigo
-                    pueden enviar y leer correos electrónicos cortos cifrados copiando y pegando
-                    texto con los Pasos 2 y 3 anteriores.
-                </p>
-                <hr />
-                <p class="lang-en">
-                    In the previous section you should have been able to
-                    use the same Symmetric Key to encrypt and decrypt messages.
-                    In the next section
-                    you use <i>Public-Key Encryption</i>. This kind of cryptosystem really
-                    should be called <i>Public/Private</i>-Key Encryption because
-                    you use a matched pair of keys: one key that you keep to yourself
-                    and another key that you send to others freely. But the industry calls this
-                    technique just Public-Key Encryption&mdash;probably because it's
-                    unexpected that any key that is public could help with security in any way.
-                </p>
-                <p class="lang-es">
-                    En la sección anterior deberías haber podido
-                    usar la misma Clave Simétrica para cifrar y descifrar mensajes.
-                    En la siguiente sección
-                    usarás <i>Cifrado de Clave Pública</i>. Este tipo de criptosistema realmente
-                    debería llamarse Cifrado de Clave <i>Pública/Privada</i> porque
-                    usas un par de claves emparejadas: una clave que guardas para ti
-                    y otra clave que envías a otros libremente. Pero la industria llama a esta
-                    técnica simplemente Cifrado de Clave Pública&mdash;probablemente porque es
-                    inesperado que cualquier clave pública pueda ayudar con la seguridad de alguna manera.
-                </p>
-            </form>
-        </div>
-        <div id="public-key" class="tab">
-            <form name="pk" action="./index.html">
-                <table border="0">
-                    <tr>
-                        <td style="background-color: #ffe76f;">
-                            <h2 class="lang-en">Public-Key Encryption</h2>
-                            <h2 class="lang-es">Cifrado de Clave Pública</h2>
-                            <p class="lang-en">
-                                Remember how in the previous section you needed to find a secure way
-                                to send your Symmetric Key to the recipient of your message?
-                                Public-Key Encryption solves the key-distribution problem!
-                            </p>
-                            <p class="lang-es">
-                                ¿Recuerdas cómo en la sección anterior necesitabas encontrar una forma segura
-                                de enviar tu Clave Simétrica al destinatario de tu mensaje?
-                                ¡El Cifrado de Clave Pública resuelve el problema de la distribución de claves!
-                            </p>
-                            <h3 class="lang-en">Step 1: Generate a Key Pair</h3>
-                            <h3 class="lang-es">Paso 1: Generar un Par de Claves</h3>
-                            <p class="lang-en">
-                                Generate a pair of matched keys by pressing the button below.
-                                You will get a <i>Public Key</i> and a <i>Private Key</i>.
-                                You will keep the Private Key to yourself. Unlike the Symmetric Key
-                                of the previous section, you <i>never</i> send your Private
-                                Key to anyone! The Public Key, however, can be seen by anyone.
-                            </p>
-                            <p class="lang-es">
-                                Genera un par de claves emparejadas presionando el botón de abajo.
-                                Obtendrás una <i>Clave Pública</i> y una <i>Clave Privada</i>.
-                                Guardarás la Clave Privada para ti. A diferencia de la Clave Simétrica
-                                de la sección anterior, <i>nunca</i> envías tu Clave Privada
-                                a nadie! La Clave Pública, sin embargo, puede ser vista por cualquiera.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td><input type="button" id="generate_public_private_keys"
-                                                name="generate_public_private_keys"
-                                                value="Generate a Public/Private Key Pair"
-                                                data-lang-en="Generate a Public/Private Key Pair"
-                                                data-lang-es="Generar un Par de Claves Pública/Privada"
-                                                onclick="generate_public_private_keys_action()" /></td>
-                                        <td class="right"><label for="generated_public_key"><span class="lang-en">Public
-                                                    Key:</span><span class="lang-es">Clave Pública:</span></label></td>
-                                        <td class="left"><input type="text" class="key" id="generated_public_key"
-                                                name="generated_public_key" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="right"><label for="generated_private_key"><span
-                                                    class="lang-en">Private Key:</span><span class="lang-es">Clave
-                                                    Privada:</span></label></td>
-                                        <td class="left"><input type="text" class="key" id="generated_private_key"
-                                                name="generated_private_key" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                Record these two keys in a safe place.
-                            </p>
-                            <p class="lang-es">
-                                Guarda estas dos claves en un lugar seguro.
-                            </p>
-                            <p class="lang-en">
-                                Public and Private Keys are unusual: any message that is encrypted
-                                with one of them can be decrypted with the other. However
-                                neither key acts like a Symmetric Key. That is, a message
-                                <i>never</i> can be decrypted using the <i>same</i> key that
-                                encrypted it.
-                            </p>
-                            <p class="lang-es">
-                                Las Claves Públicas y Privadas son inusuales: cualquier mensaje que se cifre
-                                con una de ellas puede ser descifrado con la otra. Sin embargo,
-                                ninguna clave actúa como una Clave Simétrica. Es decir, un mensaje
-                                <i>nunca</i> puede ser descifrado usando la <i>misma</i> clave que
-                                lo cifró.
-                            </p>
-                            <p class="lang-en">
-                                These keys are used differently depending on what you want to do.
-                                You can <i>send</i> a secure message, or you can <i>sign</i> a message. While
-                                deciding which key to use for what, remember what I just said,
-                                &quot;You <i>never</i> send your Private Key to anyone!&quot;
-                                When encrypting and signing, you need to consider the order.
-                                Let's look at all of the possibilities.
-                            </p>
-                            <p class="lang-es">
-                                Estas claves se usan de manera diferente dependiendo de lo que quieras hacer.
-                                Puedes <i>enviar</i> un mensaje seguro, o puedes <i>firmar</i> un mensaje. Mientras
-                                decides qué clave usar para qué, recuerda lo que acabo de decir,
-                                &quot;¡<i>Nunca</i> envías tu Clave Privada a nadie!&quot;
-                                Al cifrar y firmar, necesitas considerar el orden.
-                                Veamos todas las posibilidades.
-                            </p>
-                            <h3 class="lang-en">Step 2a: (Optional) Sign a Message</h3>
-                            <h3 class="lang-es">Paso 2a: (Opcional) Firmar un Mensaje</h3>
-                            <p class="lang-en">
-                                Before sending a message, you may want to <i>sign</i> it.
-                                By signing a message you are proving to your recipient that the
-                                message has come from you. You sign plaintext by
-                                encrypting it using <i>your</i> Private Key.
-                            </p>
-                            <p class="lang-es">
-                                Antes de enviar un mensaje, es posible que desees <i>firmarlo</i>.
-                                Al firmar un mensaje, estás demostrando a tu destinatario que el
-                                mensaje proviene de ti. Firmas el texto plano
-                                cifrándolo usando <i>tu</i> Clave Privada.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label for="plaintext_to_be_signed"><span
-                                                    class="lang-en">Plaintext:</span><span class="lang-es">Texto
-                                                    plano:</span></label></td>
-                                        <td class="left"><input type="text" class="message" id="plaintext_to_be_signed"
-                                                name="plaintext_to_be_signed" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="private_key_to_sign_message"><span
-                                                    class="lang-en">Sender's Private
-                                                    Key:</span><span class="lang-es">Clave Privada del
-                                                    Remitente:</span></label></td>
-                                        <td class="left"><input type="text" class="key" id="private_key_to_sign_message"
-                                                name="private_key_to_sign_message" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="sign_message" name="sign_message"
-                                                value="Encrypt Using Sender's Private Key"
-                                                data-lang-en="Encrypt Using Sender's Private Key"
-                                                data-lang-es="Cifrar usando Clave Privada del Remitente"
-                                                onclick="encrypt_using_your_private_key()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="signed_message"><span class="lang-en">Signed
-                                                    Message:</span><span class="lang-es">Mensaje firmado:</span></label>
-                                        </td>
-                                        <td class="left"><input type="text" class="message" id="signed_message"
-                                                name="signed_message" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                How is this secure? <i>Anyone</i> can get your Public Key and decrypt the
-                                ciphertext! Yes, and that's the point. Signing a message does not
-                                <i>protect</i> it.
-                                After you <i>sign</i> a message with your Private Key,
-                                anyone can show that the message must have been signed by you
-                                because they can decrypt it using <i>only</i> your Public Key.
-                            </p>
-                            <p class="lang-es">
-                                ¿Cómo es esto seguro? ¡<i>Cualquiera</i> puede obtener tu Clave Pública y descifrar el
-                                texto cifrado! Sí, y esa es la idea. Firmar un mensaje no
-                                lo <i>protege</i>.
-                                Después de que <i>firmes</i> un mensaje con tu Clave Privada,
-                                cualquiera puede demostrar que el mensaje debe haber sido firmado por ti
-                                porque pueden descifrarlo usando <i>solo</i> tu Clave Pública.
-                            </p>
-                            <h3 class="lang-en">Step 2b: Encrypt a Message</h3>
-                            <h3 class="lang-es">Paso 2b: Cifrar un Mensaje</h3>
-                            <p class="lang-en">
-                                When sending a message to someone, encrypt it using <i>their</i> Public Key.
-                                Remember that a message never can be decrypted using the same key that
-                                encrypted it, and so once a message is encrypted with someone's
-                                Public Key, it can be decrypted only using the matching Private Key.
-                            </p>
-                            <p class="lang-es">
-                                Al enviar un mensaje a alguien, cifralo usando la <i>Clave Pública</i> de esa persona.
-                                Recuerda que un mensaje nunca puede ser descifrado usando la misma clave que
-                                lo cifró, y por lo tanto, una vez que un mensaje se cifra con la
-                                Clave Pública de alguien, solo puede ser descifrado usando la Clave Privada
-                                correspondiente.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label for="plaintext_to_be_encrypted"><span
-                                                    class="lang-en">Plaintext
-                                                    or Signed Message:</span><span class="lang-es">Texto plano o mensaje
-                                                    firmado:</span></label></td>
-                                        <td class="left"><input type="text" class="message"
-                                                id="plaintext_to_be_encrypted" name="plaintext_to_be_encrypted" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="public_key_to_encrypt_message"><span
-                                                    class="lang-en">Recipient's Public
-                                                    Key:</span><span class="lang-es">Clave Pública del
-                                                    Destinatario:</span></label></td>
-                                        <td class="left"><input type="text" class="key"
-                                                id="public_key_to_encrypt_message"
-                                                name="public_key_to_encrypt_message" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="encrypt_message"
-                                                name="encrypt_message" value="Encrypt Using Recipient's Public Key"
-                                                data-lang-en="Encrypt Using Recipient's Public Key"
-                                                data-lang-es="Cifrar usando Clave Pública del Destinatario"
-                                                onclick="encrypt_using_recipient_public_key()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="encrypted_message"><span
-                                                    class="lang-en">Ciphertext:</span><span class="lang-es">Texto
-                                                    cifrado:</span></label></td>
-                                        <td class="left"><input type="text" class="message" id="encrypted_message"
-                                                name="encrypted_message" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                Send the ciphertext to your recipient.
-                                They will follow Step 3 to decrypt the ciphertext.
-                            </p>
-                            <p class="lang-es">
-                                Envía el texto cifrado a tu destinatario.
-                                Ellos seguirán el Paso 3 para descifrar el texto cifrado.
-                            </p>
-                            <h3 class="lang-en">Step 3a: Decrypt a Message</h3>
-                            <h3 class="lang-es">Paso 3a: Descifrar un Mensaje</h3>
-                            <p class="lang-en">
-                                Did you just receive a message from someone else? Then follow this step.
-                                <i>If you are sending a message, then follow the steps 2a and 2b instead.</i>
-                                The sender already has encrypted the message
-                                using your <i>Public</i> Key, and so you decrypt it using your
-                                <i>Private</i> Key.
-                            </p>
-                            <p class="lang-es">
-                                ¿Acabas de recibir un mensaje de otra persona? Entonces sigue este paso.
-                                <i>Si estás enviando un mensaje, sigue los pasos 2a y 2b en su lugar.</i>
-                                El remitente ya ha cifrado el mensaje
-                                usando tu <i>Clave Pública</i>, por lo que lo descifras usando tu
-                                <i>Clave Privada</i>.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label for="message_to_be_decrypted"><span
-                                                    class="lang-en">Ciphertext:</span><span class="lang-es">Texto
-                                                    cifrado:</span></label></td>
-                                        <td class="left"><input type="text" class="message" id="message_to_be_decrypted"
-                                                name="message_to_be_decrypted" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="private_key_to_decrypt_message"><span
-                                                    class="lang-en">Recipient's Private
-                                                    Key:</span><span class="lang-es">Clave Privada del
-                                                    Destinatario:</span></label></td>
-                                        <td class="left"><input type="text" class="key"
-                                                id="private_key_to_decrypt_message"
-                                                name="private_key_to_decrypt_message" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="decrypt_message"
-                                                name="decrypt_message" value="Decrypt Using Recipient's Private Key"
-                                                data-lang-en="Decrypt Using Recipient's Private Key"
-                                                data-lang-es="Descifrar usando Clave Privada del Destinatario"
-                                                onclick="decrypt_using_your_private_key()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="decrypted_message"><span class="lang-en">Plaintext
-                                                    or Signed Message:</span><span class="lang-es">Texto plano o mensaje
-                                                    firmado:</span></label></td>
-                                        <td class="left"><input type="text" class="message" id="decrypted_message"
-                                                name="decrypted_message" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                If you still can't read the decrypted message, it may be signed.
-                                So go to the next step.
-                            </p>
-                            <p class="lang-es">
-                                Si aún no puedes leer el mensaje descifrado, puede estar firmado.
-                                Así que ve al siguiente paso.
-                            </p>
-                            <h3 class="lang-en">Step 3b: (Optional) Verify a Signature</h3>
-                            <h3 class="lang-es">Paso 3b: (Opcional) Verificar una Firma</h3>
-                            <p class="lang-en">
-                                Someone claims that they have sent you a message? Confirm their
-                                signature by decrypting the message using <i>their</i> Public Key.
-                            </p>
-                            <p class="lang-es">
-                                ¿Alguien afirma que te ha enviado un mensaje? Confirma su
-                                firma descifrando el mensaje usando la <i>Clave Pública</i> de esa persona.
-                            </p>
-                            <center>
-                                <table border="0">
-                                    <tr>
-                                        <td class="right"><label for="message_to_be_verified"><span
-                                                    class="lang-en">Signed Message:</span><span class="lang-es">Mensaje
-                                                    firmado:</span></label>
-                                        </td>
-                                        <td class="left"><input type="text" class="message" id="message_to_be_verified"
-                                                name="message_to_be_verified" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="public_key_to_verify_signature"><span
-                                                    class="lang-en">Sender's Public
-                                                    Key:</span><span class="lang-es">Clave Pública del
-                                                    Remitente:</span></label></td>
-                                        <td class="left"><input type="text" class="key"
-                                                id="public_key_to_verify_signature"
-                                                name="public_key_to_verify_signature" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td>&nbsp;</td>
-                                        <td class="left"><input type="button" id="verify_signature"
-                                                name="verify_signature" value="Decrypt Using Sender's Public Key"
-                                                data-lang-en="Decrypt Using Sender's Public Key"
-                                                data-lang-es="Descifrar usando Clave Pública del Remitente"
-                                                onclick="verify_using_sender_public_key()" /></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="right"><label for="verified_message"><span
-                                                    class="lang-en">Plaintext:</span><span class="lang-es">Texto
-                                                    plano:</span></label></td>
-                                        <td class="left"><input type="text" class="message" id="verified_message"
-                                                name="verified_message" /></td>
-                                    </tr>
-                                </table>
-                            </center>
-                            <p class="lang-en">
-                                Realize that when we say we &quot;verify a signature,&quot;
-                                really we are removing a
-                                layer of encryption from the entire message. There is no
-                                separate signature appended to the message&mdash;a signature
-                                in the form of <i>encryption</i> has been applied to the entire message.
-                            </p>
-                            <p class="lang-es">
-                                Date cuenta de que cuando decimos que &quot;verificamos una firma,&quot;
-                                realmente estamos eliminando una
-                                capa de cifrado de todo el mensaje. No hay una
-                                firma separada adjunta al mensaje&mdash;una firma
-                                en forma de <i>cifrado</i> se ha aplicado a todo el mensaje.
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-                <p class="lang-en">
-                    The four steps 2a&ndash;2b and 3a&ndash;3b
-                    above are <i>not</i> all applied to each message!
-                    Instead, you apply the steps depending on what you need to do.
-                    When sending a signed message, you do steps 2a and 2b, in that order.
-                    When receiving a signed message, you do steps 3a and 3b, in that order.
-                    Consider for a moment why the order is important.
-                </p>
-                <p class="lang-es">
-                    Los cuatro pasos 2a&ndash;2b y 3a&ndash;3b
-                    anteriores <i>no</i> se aplican todos a cada mensaje!
-                    En su lugar, aplicas los pasos dependiendo de lo que necesites hacer.
-                    Al enviar un mensaje firmado, haces los pasos 2a y 2b, en ese orden.
-                    Al recibir un mensaje firmado, haces los pasos 3a y 3b, en ese orden.
-                    Considera por un momento por qué el orden es importante.
-                </p>
-                <p class="lang-en">
-                    Step 2a signs a message, and step 2b protects the
-                    message <i>and the signature</i>.
-                    So the protection must be applied second. Similarly,
-                    when decrypting someone else's signed message, their signature
-                    is protected along with the message, and so you decrypt the ciphertext
-                    first, and then you verify their signature.
-                </p>
-                <p class="lang-es">
-                    El paso 2a firma un mensaje, y el paso 2b protege el
-                    mensaje <i>y la firma</i>.
-                    Por lo tanto, la protección debe aplicarse en segundo lugar. De manera similar,
-                    al descifrar el mensaje firmado de otra persona, su firma
-                    está protegida junto con el mensaje, por lo que descifras el texto cifrado
-                    primero, y luego verificas su firma.
-                </p>
-                <p class="lang-en">
-                    Consider what could happen
-                    if you encrypted a message <i>first</i> and <i>then</i> signed it.
-                    Signing last is a bad idea because someone could <i>remove your
-                        signature</i> and then add their own, claiming that the message
-                    came from them. So we always encrypt last.
-                </p>
-                <p class="lang-es">
-                    Considera lo que podría suceder
-                    si cifraras un mensaje <i>primero</i> y <i>luego</i> lo firmaras.
-                    Firmar al final es una mala idea porque alguien podría <i>eliminar tu
-                        firma</i> y luego agregar la suya, afirmando que el mensaje
-                    proviene de ellos. Por eso siempre ciframos al final.
-                </p>
-                <h3 class="lang-en">Practice</h3>
-                <h3 class="lang-es">Práctica</h3>
-                <p class="lang-en">
-                    3. Generate a public/private key pair, and share just the Public Key
-                    with a friend.
-                </p>
-                <p class="lang-es">
-                    3. Genera un par de claves pública/privada y comparte solo la Clave Pública
-                    con un amigo.
-                </p>
-                <p class="lang-en">
-                    4. Have your friend do the same, sharing just their Public Key with you.
-                    At this point, you each have your own Private Key and the other's Public
-                    Key.
-                </p>
-                <p class="lang-es">
-                    4. Haz que tu amigo haga lo mismo, compartiendo solo su Clave Pública contigo.
-                    En este punto, cada uno tiene su propia Clave Privada y la Clave Pública del otro.
-                </p>
-                <p class="lang-en">
-                    5. Exchange <i>unsigned</i> messages. The sender uses just step 2b,
-                    and the recipient uses just step 3a.
-                </p>
-                <p class="lang-es">
-                    5. Intercambia mensajes <i>no firmados</i>. El remitente usa solo el paso 2b,
-                    y el destinatario usa solo el paso 3a.
-                </p>
-                <p class="lang-en">
-                    6. Note that you can't decrypt a
-                    message unless you use the proper key. Encrypt a
-                    message to your friend using their Public Key, but don't send it yet.
-                    Can you decrypt the ciphertext using their Public Key?
-                </p>
-                <p class="lang-es">
-                    6. Ten en cuenta que no puedes descifrar un
-                    mensaje a menos que uses la clave adecuada. Cifra un
-                    mensaje para tu amigo usando su Clave Pública, pero no lo envíes aún.
-                    ¿Puedes descifrar el texto cifrado usando su Clave Pública?
-                </p>
-                <p class="lang-en">
-                    7. Now exchange <i>signed</i> messages. The sender uses steps 2a and 2b,
-                    and the recipient uses steps 3a and 3b.
-                </p>
-                <p class="lang-es">
-                    7. Ahora intercambia mensajes <i>firmados</i>. El remitente usa los pasos 2a y 2b,
-                    y el destinatario usa los pasos 3a y 3b.
-                </p>
-            </form>
+                    <table border="0">
+                        <tr>
+                            <td style="background-color: #87CEFA;">
+                                <h2 class="lang-en">Symmetric-Key Encryption</h2>
+                                <h2 class="lang-es">Cifrado de Clave Simétrica</h2>
+                                <p class="lang-en">
+                                    Like traditional door locks that use one key for both locking and
+                                    unlocking a door, Symmetric-Key Encryption uses one
+                                    key for both encrypting and decrypting a message.
+                                </p>
+                                <p class="lang-es">
+                                    Como las cerraduras tradicionales que usan una llave para cerrar y
+                                    abrir una puerta, el Cifrado de Clave Simétrica usa una
+                                    llave para cifrar y descifrar un mensaje.
+                                </p>
+                                <p class="lang-en">
+                                    Follow these steps to send a secret message to someone.
+                                    First, think who you want to send a message to.
+                                    It needs to be someone whom you can securely send a Symmetric Key to.
+                                    (That's one of the disadvantages of Symmetric-Key Encryption:
+                                    you need to find a secure way to distribute your Symmetric Key before you
+                                    can send a message!)
+                                </p>
+                                <p class="lang-es">
+                                    Sigue estos pasos para enviar un mensaje secreto a alguien.
+                                    Primero, piensa a quién quieres enviar un mensaje.
+                                    Debe ser alguien a quien puedas enviar una Clave Simétrica de forma segura.
+                                    (Esa es una de las desventajas del Cifrado de Clave Simétrica:
+                                    necesitas encontrar una forma segura de distribuir tu Clave Simétrica antes de
+                                    poder enviar un mensaje!)
+                                </p>
+                                <h3 class="lang-en">Step 1: Generate a Symmetric Key</h3>
+                                <h3 class="lang-es">Paso 1: Generar una Clave Simétrica</h3>
+                                <p class="lang-en">
+                                    The first step in sending a secret message is to generate a
+                                    Symmetric Key. Do this by pressing the button below.
+                                </p>
+                                <p class="lang-es">
+                                    El primer paso para enviar un mensaje secreto es generar una
+                                    Clave Simétrica. Haz esto presionando el botón de abajo.
+                                </p>
+                                <center>
+                                    <input type="button" id="generate_symmetric_key" name="generate_symmetric_key"
+                                        value="Generate a Symmetric Key" data-lang-en="Generate a Symmetric Key"
+                                        data-lang-es="Generar una Clave Simétrica"
+                                        onclick="generate_symmetric_key_action()" /><input type="text" class="key"
+                                        id="generated_symmetric_key" name="generated_symmetric_key" />
+                                </center>
+                                <p class="lang-en">
+                                    You and the recipient of your secret message both will use this key, and so
+                                    you need to securely send it to the recipient of your message.
+                                    But since this is just a demo, you can send this Symmetric Key any
+                                    way you like.
+                                    Normally, you <i>never</i> would use email to send a Symmetric Key!
+                                </p>
+                                <p class="lang-es">
+                                    Tú y el destinatario de tu mensaje secreto usarán esta clave, por lo que
+                                    necesitas enviarla de forma segura al destinatario de tu mensaje.
+                                    Pero como esto es solo una demostración, puedes enviar esta Clave Simétrica de
+                                    cualquier
+                                    manera que desees.
+                                    Normalmente, <i>nunca</i> usarías el correo electrónico para enviar una Clave
+                                    Simétrica!
+                                </p>
+                                <h3 class="lang-en">Step 2: Encrypt a Message</h3>
+                                <h3 class="lang-es">Paso 2: Cifrar un Mensaje</h3>
+                                <p class="lang-en">
+                                    Here's how to encrypt a message before sending it to someone else.
+                                    If you just <i>received</i> a message,
+                                    then follow the next step instead.
+                                    We call your message the <i>plaintext</i>. Enter the plaintext of your
+                                    message and your Symmetric Key. Then press
+                                    the button to encrypt the plaintext of your message into
+                                    its <i>ciphertext</i>.
+                                </p>
+                                <p class="lang-es">
+                                    Aquí te mostramos cómo cifrar un mensaje antes de enviarlo a otra persona.
+                                    Si acabas de <i>recibir</i> un mensaje,
+                                    sigue el siguiente paso en su lugar.
+                                    Llamamos a tu mensaje el <i>texto plano</i>. Ingresa el texto plano de tu
+                                    mensaje y tu Clave Simétrica. Luego presiona
+                                    el botón para cifrar el texto plano de tu mensaje en
+                                    su <i>texto cifrado</i>.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label
+                                                    for="plaintext_for_encryption_using_symmetric_key"><span
+                                                        class="lang-en">Plaintext
+                                                        of Message:</span><span class="lang-es">Texto plano del
+                                                        mensaje:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="plaintext_for_encryption_using_symmetric_key"
+                                                    name="plaintext_for_encryption_using_symmetric_key" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="symmetric_key_for_encryption"><span
+                                                        class="lang-en">Symmetric
+                                                        Key:</span><span class="lang-es">Clave Simétrica:</span></label>
+                                            </td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="symmetric_key_for_encryption"
+                                                    name="symmetric_key_for_encryption" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="encrypt_using_symmetric_key"
+                                                    name="encrypt_using_symmetric_key"
+                                                    value="Encrypt Using Symmetric Key"
+                                                    data-lang-en="Encrypt Using Symmetric Key"
+                                                    data-lang-es="Cifrar usando Clave Simétrica"
+                                                    onclick="encrypt_using_symmetric_key_action()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label
+                                                    for="ciphertext_of_encryption_using_symmetric_key"><span
+                                                        class="lang-en">Ciphertext
+                                                        of Message:</span><span class="lang-es">Texto cifrado del
+                                                        mensaje:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="ciphertext_of_encryption_using_symmetric_key"
+                                                    name="ciphertext_of_encryption_using_symmetric_key" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    Send the ciphertext to your recipient. They will follow Step 3
+                                    to decrypt the ciphertext using the shared Symmetric Key
+                                    that you and they already have.
+                                </p>
+                                <p class="lang-es">
+                                    Envía el texto cifrado a tu destinatario. Ellos seguirán el Paso 3
+                                    para descifrar el texto cifrado usando la Clave Simétrica compartida
+                                    que tú y ellos ya tienen.
+                                </p>
+                                <h3 class="lang-en">Step 3: Decrypt a Message</h3>
+                                <h3 class="lang-es">Paso 3: Descifrar un Mensaje</h3>
+                                <p class="lang-en">
+                                    Did you just receive a message from someone else? Then follow this
+                                    step. <i>If you are sending a message,
+                                        then follow the previous step instead.</i>
+                                    Here you decrypt the message using the Symmetric Key.
+                                    We call the encrypted message the <i>ciphertext</i>. Enter the ciphertext
+                                    of the message followed by your Symmetric Key, and press
+                                    the button to decrypt the ciphertext of the message into plaintext.
+                                </p>
+                                <p class="lang-es">
+                                    ¿Acabas de recibir un mensaje de otra persona? Entonces sigue este
+                                    paso. <i>Si estás enviando un mensaje,
+                                        sigue el paso anterior en su lugar.</i>
+                                    Aquí descifras el mensaje usando la Clave Simétrica.
+                                    Llamamos al mensaje cifrado el <i>texto cifrado</i>. Ingresa el texto cifrado
+                                    del mensaje seguido de tu Clave Simétrica, y presiona
+                                    el botón para descifrar el texto cifrado del mensaje en texto plano.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label
+                                                    for="ciphertext_for_decryption_using_symmetric_key"><span
+                                                        class="lang-en">Ciphertext
+                                                        of Message:</span><span class="lang-es">Texto cifrado del
+                                                        mensaje:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="ciphertext_for_decryption_using_symmetric_key"
+                                                    name="ciphertext_for_decryption_using_symmetric_key" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="symmetric_key_for_decryption"><span
+                                                        class="lang-en">Symmetric
+                                                        Key:</span><span class="lang-es">Clave Simétrica:</span></label>
+                                            </td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="symmetric_key_for_decryption"
+                                                    name="symmetric_key_for_decryption" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="decrypt_using_symmetric_key"
+                                                    name="decrypt_using_symmetric_key"
+                                                    value="Decrypt Using Symmetric Key"
+                                                    data-lang-en="Decrypt Using Symmetric Key"
+                                                    data-lang-es="Descifrar usando Clave Simétrica"
+                                                    onclick="decrypt_using_symmetric_key_action()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label
+                                                    for="plaintext_of_decryption_using_symmetric_key"><span
+                                                        class="lang-en">Plaintext
+                                                        of Message:</span><span class="lang-es">Texto plano del
+                                                        mensaje:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="plaintext_of_decryption_using_symmetric_key"
+                                                    name="plaintext_of_decryption_using_symmetric_key" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                    <h3 class="lang-en">Practice</h3>
+                    <h3 class="lang-es">Práctica</h3>
+                    <p class="lang-en">
+                        1. Generate a Symmetric Key and share it with a friend.
+                    </p>
+                    <p class="lang-es">
+                        1. Genera una Clave Simétrica y compártela con un amigo.
+                    </p>
+                    <p class="lang-en">
+                        2. Using your shared Symmetric Key, see if you and your friend
+                        can send and read short encrypted emails by copying and pasting
+                        text with Steps 2 and 3 above.
+                    </p>
+                    <p class="lang-es">
+                        2. Usando tu Clave Simétrica compartida, ve si tú y tu amigo
+                        pueden enviar y leer correos electrónicos cortos cifrados copiando y pegando
+                        texto con los Pasos 2 y 3 anteriores.
+                    </p>
+                    <hr />
+                    <p class="lang-en">
+                        In the previous section you should have been able to
+                        use the same Symmetric Key to encrypt and decrypt messages.
+                        In the next section
+                        you use <i>Public-Key Encryption</i>. This kind of cryptosystem really
+                        should be called <i>Public/Private</i>-Key Encryption because
+                        you use a matched pair of keys: one key that you keep to yourself
+                        and another key that you send to others freely. But the industry calls this
+                        technique just Public-Key Encryption&mdash;probably because it's
+                        unexpected that any key that is public could help with security in any way.
+                    </p>
+                    <p class="lang-es">
+                        En la sección anterior deberías haber podido
+                        usar la misma Clave Simétrica para cifrar y descifrar mensajes.
+                        En la siguiente sección
+                        usarás <i>Cifrado de Clave Pública</i>. Este tipo de criptosistema realmente
+                        debería llamarse Cifrado de Clave <i>Pública/Privada</i> porque
+                        usas un par de claves emparejadas: una clave que guardas para ti
+                        y otra clave que envías a otros libremente. Pero la industria llama a esta
+                        técnica simplemente Cifrado de Clave Pública&mdash;probablemente porque es
+                        inesperado que cualquier clave pública pueda ayudar con la seguridad de alguna manera.
+                    </p>
+                </form>
+
+            </div>
+            <div class="tab-content" id="tab-2">
+                <form name="pk" action="./index.html">
+                    <table border="0">
+                        <tr>
+                            <td style="background-color: #ffe76f;">
+                                <h2 class="lang-en">Public-Key Encryption</h2>
+                                <h2 class="lang-es">Cifrado de Clave Pública</h2>
+                                <p class="lang-en">
+                                    Remember how in the previous section you needed to find a secure way
+                                    to send your Symmetric Key to the recipient of your message?
+                                    Public-Key Encryption solves the key-distribution problem!
+                                </p>
+                                <p class="lang-es">
+                                    ¿Recuerdas cómo en la sección anterior necesitabas encontrar una forma segura
+                                    de enviar tu Clave Simétrica al destinatario de tu mensaje?
+                                    ¡El Cifrado de Clave Pública resuelve el problema de la distribución de claves!
+                                </p>
+                                <h3 class="lang-en">Step 1: Generate a Key Pair</h3>
+                                <h3 class="lang-es">Paso 1: Generar un Par de Claves</h3>
+                                <p class="lang-en">
+                                    Generate a pair of matched keys by pressing the button below.
+                                    You will get a <i>Public Key</i> and a <i>Private Key</i>.
+                                    You will keep the Private Key to yourself. Unlike the Symmetric Key
+                                    of the previous section, you <i>never</i> send your Private
+                                    Key to anyone! The Public Key, however, can be seen by anyone.
+                                </p>
+                                <p class="lang-es">
+                                    Genera un par de claves emparejadas presionando el botón de abajo.
+                                    Obtendrás una <i>Clave Pública</i> y una <i>Clave Privada</i>.
+                                    Guardarás la Clave Privada para ti. A diferencia de la Clave Simétrica
+                                    de la sección anterior, <i>nunca</i> envías tu Clave Privada
+                                    a nadie! La Clave Pública, sin embargo, puede ser vista por cualquiera.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td><input type="button" id="generate_public_private_keys"
+                                                    name="generate_public_private_keys"
+                                                    value="Generate a Public/Private Key Pair"
+                                                    data-lang-en="Generate a Public/Private Key Pair"
+                                                    data-lang-es="Generar un Par de Claves Pública/Privada"
+                                                    onclick="generate_public_private_keys_action()" /></td>
+                                            <td class="right"><label for="generated_public_key"><span
+                                                        class="lang-en">Public
+                                                        Key:</span><span class="lang-es">Clave Pública:</span></label>
+                                            </td>
+                                            <td class="left"><input type="text" class="key" id="generated_public_key"
+                                                    name="generated_public_key" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="right"><label for="generated_private_key"><span
+                                                        class="lang-en">Private Key:</span><span class="lang-es">Clave
+                                                        Privada:</span></label></td>
+                                            <td class="left"><input type="text" class="key" id="generated_private_key"
+                                                    name="generated_private_key" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    Record these two keys in a safe place.
+                                </p>
+                                <p class="lang-es">
+                                    Guarda estas dos claves en un lugar seguro.
+                                </p>
+                                <p class="lang-en">
+                                    Public and Private Keys are unusual: any message that is encrypted
+                                    with one of them can be decrypted with the other. However
+                                    neither key acts like a Symmetric Key. That is, a message
+                                    <i>never</i> can be decrypted using the <i>same</i> key that
+                                    encrypted it.
+                                </p>
+                                <p class="lang-es">
+                                    Las Claves Públicas y Privadas son inusuales: cualquier mensaje que se cifre
+                                    con una de ellas puede ser descifrado con la otra. Sin embargo,
+                                    ninguna clave actúa como una Clave Simétrica. Es decir, un mensaje
+                                    <i>nunca</i> puede ser descifrado usando la <i>misma</i> clave que
+                                    lo cifró.
+                                </p>
+                                <p class="lang-en">
+                                    These keys are used differently depending on what you want to do.
+                                    You can <i>send</i> a secure message, or you can <i>sign</i> a message. While
+                                    deciding which key to use for what, remember what I just said,
+                                    &quot;You <i>never</i> send your Private Key to anyone!&quot;
+                                    When encrypting and signing, you need to consider the order.
+                                    Let's look at all of the possibilities.
+                                </p>
+                                <p class="lang-es">
+                                    Estas claves se usan de manera diferente dependiendo de lo que quieras hacer.
+                                    Puedes <i>enviar</i> un mensaje seguro, o puedes <i>firmar</i> un mensaje. Mientras
+                                    decides qué clave usar para qué, recuerda lo que acabo de decir,
+                                    &quot;¡<i>Nunca</i> envías tu Clave Privada a nadie!&quot;
+                                    Al cifrar y firmar, necesitas considerar el orden.
+                                    Veamos todas las posibilidades.
+                                </p>
+                                <h3 class="lang-en">Step 2a: (Optional) Sign a Message</h3>
+                                <h3 class="lang-es">Paso 2a: (Opcional) Firmar un Mensaje</h3>
+                                <p class="lang-en">
+                                    Before sending a message, you may want to <i>sign</i> it.
+                                    By signing a message you are proving to your recipient that the
+                                    message has come from you. You sign plaintext by
+                                    encrypting it using <i>your</i> Private Key.
+                                </p>
+                                <p class="lang-es">
+                                    Antes de enviar un mensaje, es posible que desees <i>firmarlo</i>.
+                                    Al firmar un mensaje, estás demostrando a tu destinatario que el
+                                    mensaje proviene de ti. Firmas el texto plano
+                                    cifrándolo usando <i>tu</i> Clave Privada.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label for="plaintext_to_be_signed"><span
+                                                        class="lang-en">Plaintext:</span><span class="lang-es">Texto
+                                                        plano:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="plaintext_to_be_signed" name="plaintext_to_be_signed" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="private_key_to_sign_message"><span
+                                                        class="lang-en">Sender's Private
+                                                        Key:</span><span class="lang-es">Clave Privada del
+                                                        Remitente:</span></label></td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="private_key_to_sign_message"
+                                                    name="private_key_to_sign_message" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="sign_message" name="sign_message"
+                                                    value="Encrypt Using Sender's Private Key"
+                                                    data-lang-en="Encrypt Using Sender's Private Key"
+                                                    data-lang-es="Cifrar usando Clave Privada del Remitente"
+                                                    onclick="encrypt_using_your_private_key()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="signed_message"><span class="lang-en">Signed
+                                                        Message:</span><span class="lang-es">Mensaje
+                                                        firmado:</span></label>
+                                            </td>
+                                            <td class="left"><input type="text" class="message" id="signed_message"
+                                                    name="signed_message" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    How is this secure? <i>Anyone</i> can get your Public Key and decrypt the
+                                    ciphertext! Yes, and that's the point. Signing a message does not
+                                    <i>protect</i> it.
+                                    After you <i>sign</i> a message with your Private Key,
+                                    anyone can show that the message must have been signed by you
+                                    because they can decrypt it using <i>only</i> your Public Key.
+                                </p>
+                                <p class="lang-es">
+                                    ¿Cómo es esto seguro? ¡<i>Cualquiera</i> puede obtener tu Clave Pública y descifrar
+                                    el
+                                    texto cifrado! Sí, y esa es la idea. Firmar un mensaje no
+                                    lo <i>protege</i>.
+                                    Después de que <i>firmes</i> un mensaje con tu Clave Privada,
+                                    cualquiera puede demostrar que el mensaje debe haber sido firmado por ti
+                                    porque pueden descifrarlo usando <i>solo</i> tu Clave Pública.
+                                </p>
+                                <h3 class="lang-en">Step 2b: Encrypt a Message</h3>
+                                <h3 class="lang-es">Paso 2b: Cifrar un Mensaje</h3>
+                                <p class="lang-en">
+                                    When sending a message to someone, encrypt it using <i>their</i> Public Key.
+                                    Remember that a message never can be decrypted using the same key that
+                                    encrypted it, and so once a message is encrypted with someone's
+                                    Public Key, it can be decrypted only using the matching Private Key.
+                                </p>
+                                <p class="lang-es">
+                                    Al enviar un mensaje a alguien, cifralo usando la <i>Clave Pública</i> de esa
+                                    persona.
+                                    Recuerda que un mensaje nunca puede ser descifrado usando la misma clave que
+                                    lo cifró, y por lo tanto, una vez que un mensaje se cifra con la
+                                    Clave Pública de alguien, solo puede ser descifrado usando la Clave Privada
+                                    correspondiente.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label for="plaintext_to_be_encrypted"><span
+                                                        class="lang-en">Plaintext
+                                                        or Signed Message:</span><span class="lang-es">Texto plano o
+                                                        mensaje
+                                                        firmado:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="plaintext_to_be_encrypted" name="plaintext_to_be_encrypted" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="public_key_to_encrypt_message"><span
+                                                        class="lang-en">Recipient's Public
+                                                        Key:</span><span class="lang-es">Clave Pública del
+                                                        Destinatario:</span></label></td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="public_key_to_encrypt_message"
+                                                    name="public_key_to_encrypt_message" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="encrypt_message"
+                                                    name="encrypt_message" value="Encrypt Using Recipient's Public Key"
+                                                    data-lang-en="Encrypt Using Recipient's Public Key"
+                                                    data-lang-es="Cifrar usando Clave Pública del Destinatario"
+                                                    onclick="encrypt_using_recipient_public_key()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="encrypted_message"><span
+                                                        class="lang-en">Ciphertext:</span><span class="lang-es">Texto
+                                                        cifrado:</span></label></td>
+                                            <td class="left"><input type="text" class="message" id="encrypted_message"
+                                                    name="encrypted_message" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    Send the ciphertext to your recipient.
+                                    They will follow Step 3 to decrypt the ciphertext.
+                                </p>
+                                <p class="lang-es">
+                                    Envía el texto cifrado a tu destinatario.
+                                    Ellos seguirán el Paso 3 para descifrar el texto cifrado.
+                                </p>
+                                <h3 class="lang-en">Step 3a: Decrypt a Message</h3>
+                                <h3 class="lang-es">Paso 3a: Descifrar un Mensaje</h3>
+                                <p class="lang-en">
+                                    Did you just receive a message from someone else? Then follow this step.
+                                    <i>If you are sending a message, then follow the steps 2a and 2b instead.</i>
+                                    The sender already has encrypted the message
+                                    using your <i>Public</i> Key, and so you decrypt it using your
+                                    <i>Private</i> Key.
+                                </p>
+                                <p class="lang-es">
+                                    ¿Acabas de recibir un mensaje de otra persona? Entonces sigue este paso.
+                                    <i>Si estás enviando un mensaje, sigue los pasos 2a y 2b en su lugar.</i>
+                                    El remitente ya ha cifrado el mensaje
+                                    usando tu <i>Clave Pública</i>, por lo que lo descifras usando tu
+                                    <i>Clave Privada</i>.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label for="message_to_be_decrypted"><span
+                                                        class="lang-en">Ciphertext:</span><span class="lang-es">Texto
+                                                        cifrado:</span></label></td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="message_to_be_decrypted" name="message_to_be_decrypted" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="private_key_to_decrypt_message"><span
+                                                        class="lang-en">Recipient's Private
+                                                        Key:</span><span class="lang-es">Clave Privada del
+                                                        Destinatario:</span></label></td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="private_key_to_decrypt_message"
+                                                    name="private_key_to_decrypt_message" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="decrypt_message"
+                                                    name="decrypt_message" value="Decrypt Using Recipient's Private Key"
+                                                    data-lang-en="Decrypt Using Recipient's Private Key"
+                                                    data-lang-es="Descifrar usando Clave Privada del Destinatario"
+                                                    onclick="decrypt_using_your_private_key()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="decrypted_message"><span
+                                                        class="lang-en">Plaintext
+                                                        or Signed Message:</span><span class="lang-es">Texto plano o
+                                                        mensaje
+                                                        firmado:</span></label></td>
+                                            <td class="left"><input type="text" class="message" id="decrypted_message"
+                                                    name="decrypted_message" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    If you still can't read the decrypted message, it may be signed.
+                                    So go to the next step.
+                                </p>
+                                <p class="lang-es">
+                                    Si aún no puedes leer el mensaje descifrado, puede estar firmado.
+                                    Así que ve al siguiente paso.
+                                </p>
+                                <h3 class="lang-en">Step 3b: (Optional) Verify a Signature</h3>
+                                <h3 class="lang-es">Paso 3b: (Opcional) Verificar una Firma</h3>
+                                <p class="lang-en">
+                                    Someone claims that they have sent you a message? Confirm their
+                                    signature by decrypting the message using <i>their</i> Public Key.
+                                </p>
+                                <p class="lang-es">
+                                    ¿Alguien afirma que te ha enviado un mensaje? Confirma su
+                                    firma descifrando el mensaje usando la <i>Clave Pública</i> de esa persona.
+                                </p>
+                                <center>
+                                    <table border="0">
+                                        <tr>
+                                            <td class="right"><label for="message_to_be_verified"><span
+                                                        class="lang-en">Signed Message:</span><span
+                                                        class="lang-es">Mensaje
+                                                        firmado:</span></label>
+                                            </td>
+                                            <td class="left"><input type="text" class="message"
+                                                    id="message_to_be_verified" name="message_to_be_verified" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="public_key_to_verify_signature"><span
+                                                        class="lang-en">Sender's Public
+                                                        Key:</span><span class="lang-es">Clave Pública del
+                                                        Remitente:</span></label></td>
+                                            <td class="left"><input type="text" class="key"
+                                                    id="public_key_to_verify_signature"
+                                                    name="public_key_to_verify_signature" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td class="left"><input type="button" id="verify_signature"
+                                                    name="verify_signature" value="Decrypt Using Sender's Public Key"
+                                                    data-lang-en="Decrypt Using Sender's Public Key"
+                                                    data-lang-es="Descifrar usando Clave Pública del Remitente"
+                                                    onclick="verify_using_sender_public_key()" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="right"><label for="verified_message"><span
+                                                        class="lang-en">Plaintext:</span><span class="lang-es">Texto
+                                                        plano:</span></label></td>
+                                            <td class="left"><input type="text" class="message" id="verified_message"
+                                                    name="verified_message" /></td>
+                                        </tr>
+                                    </table>
+                                </center>
+                                <p class="lang-en">
+                                    Realize that when we say we &quot;verify a signature,&quot;
+                                    really we are removing a
+                                    layer of encryption from the entire message. There is no
+                                    separate signature appended to the message&mdash;a signature
+                                    in the form of <i>encryption</i> has been applied to the entire message.
+                                </p>
+                                <p class="lang-es">
+                                    Date cuenta de que cuando decimos que &quot;verificamos una firma,&quot;
+                                    realmente estamos eliminando una
+                                    capa de cifrado de todo el mensaje. No hay una
+                                    firma separada adjunta al mensaje&mdash;una firma
+                                    en forma de <i>cifrado</i> se ha aplicado a todo el mensaje.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="lang-en">
+                        The four steps 2a&ndash;2b and 3a&ndash;3b
+                        above are <i>not</i> all applied to each message!
+                        Instead, you apply the steps depending on what you need to do.
+                        When sending a signed message, you do steps 2a and 2b, in that order.
+                        When receiving a signed message, you do steps 3a and 3b, in that order.
+                        Consider for a moment why the order is important.
+                    </p>
+                    <p class="lang-es">
+                        Los cuatro pasos 2a&ndash;2b y 3a&ndash;3b
+                        anteriores <i>no</i> se aplican todos a cada mensaje!
+                        En su lugar, aplicas los pasos dependiendo de lo que necesites hacer.
+                        Al enviar un mensaje firmado, haces los pasos 2a y 2b, en ese orden.
+                        Al recibir un mensaje firmado, haces los pasos 3a y 3b, en ese orden.
+                        Considera por un momento por qué el orden es importante.
+                    </p>
+                    <p class="lang-en">
+                        Step 2a signs a message, and step 2b protects the
+                        message <i>and the signature</i>.
+                        So the protection must be applied second. Similarly,
+                        when decrypting someone else's signed message, their signature
+                        is protected along with the message, and so you decrypt the ciphertext
+                        first, and then you verify their signature.
+                    </p>
+                    <p class="lang-es">
+                        El paso 2a firma un mensaje, y el paso 2b protege el
+                        mensaje <i>y la firma</i>.
+                        Por lo tanto, la protección debe aplicarse en segundo lugar. De manera similar,
+                        al descifrar el mensaje firmado de otra persona, su firma
+                        está protegida junto con el mensaje, por lo que descifras el texto cifrado
+                        primero, y luego verificas su firma.
+                    </p>
+                    <p class="lang-en">
+                        Consider what could happen
+                        if you encrypted a message <i>first</i> and <i>then</i> signed it.
+                        Signing last is a bad idea because someone could <i>remove your
+                            signature</i> and then add their own, claiming that the message
+                        came from them. So we always encrypt last.
+                    </p>
+                    <p class="lang-es">
+                        Considera lo que podría suceder
+                        si cifraras un mensaje <i>primero</i> y <i>luego</i> lo firmaras.
+                        Firmar al final es una mala idea porque alguien podría <i>eliminar tu
+                            firma</i> y luego agregar la suya, afirmando que el mensaje
+                        proviene de ellos. Por eso siempre ciframos al final.
+                    </p>
+                    <h3 class="lang-en">Practice</h3>
+                    <h3 class="lang-es">Práctica</h3>
+                    <p class="lang-en">
+                        3. Generate a public/private key pair, and share just the Public Key
+                        with a friend.
+                    </p>
+                    <p class="lang-es">
+                        3. Genera un par de claves pública/privada y comparte solo la Clave Pública
+                        con un amigo.
+                    </p>
+                    <p class="lang-en">
+                        4. Have your friend do the same, sharing just their Public Key with you.
+                        At this point, you each have your own Private Key and the other's Public
+                        Key.
+                    </p>
+                    <p class="lang-es">
+                        4. Haz que tu amigo haga lo mismo, compartiendo solo su Clave Pública contigo.
+                        En este punto, cada uno tiene su propia Clave Privada y la Clave Pública del otro.
+                    </p>
+                    <p class="lang-en">
+                        5. Exchange <i>unsigned</i> messages. The sender uses just step 2b,
+                        and the recipient uses just step 3a.
+                    </p>
+                    <p class="lang-es">
+                        5. Intercambia mensajes <i>no firmados</i>. El remitente usa solo el paso 2b,
+                        y el destinatario usa solo el paso 3a.
+                    </p>
+                    <p class="lang-en">
+                        6. Note that you can't decrypt a
+                        message unless you use the proper key. Encrypt a
+                        message to your friend using their Public Key, but don't send it yet.
+                        Can you decrypt the ciphertext using their Public Key?
+                    </p>
+                    <p class="lang-es">
+                        6. Ten en cuenta que no puedes descifrar un
+                        mensaje a menos que uses la clave adecuada. Cifra un
+                        mensaje para tu amigo usando su Clave Pública, pero no lo envíes aún.
+                        ¿Puedes descifrar el texto cifrado usando su Clave Pública?
+                    </p>
+                    <p class="lang-en">
+                        7. Now exchange <i>signed</i> messages. The sender uses steps 2a and 2b,
+                        and the recipient uses steps 3a and 3b.
+                    </p>
+                    <p class="lang-es">
+                        7. Ahora intercambia mensajes <i>firmados</i>. El remitente usa los pasos 2a y 2b,
+                        y el destinatario usa los pasos 3a y 3b.
+                    </p>
+                </form>
+            </div>
         </div>
         <hr />
         <p>
