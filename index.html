@@ -334,6 +334,17 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             document.pk.verified_message.value =
                 shift_permute(ciphertext, shift_amount);
         }
+
+        function show_hide_advanced_mode() {
+            var advanced_mode = document.getElementById('advanced_mode').checked;
+            var advanced_elements = document.querySelectorAll('.advanced');
+
+            advanced_elements.forEach(el => {
+                console.log("advanced");
+                el.style.display = advanced_mode ? 'block' : 'none';
+            });
+        }
+
     </script>
     <script type="text/javascript">
         /* User interface */
@@ -387,10 +398,6 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-
-        });
-
         function initTabs() {
             const tabs = document.querySelectorAll('.tab');
             const contents = document.querySelectorAll('.tab-content');
@@ -418,6 +425,7 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             check_javascript_is_enabled();
             initLanguages();
             initTabs();
+            show_hide_advanced_mode();
         }
     </script>
 </head>
@@ -429,6 +437,17 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             <option value="en" selected>English</option>
             <option value="es">Español</option>
         </select>
+    </div>
+    <div class="language-selector">
+        <table>
+            <tr>
+                <td><label for="advanced_mode"><span class="lang-en">Advanced
+                            Mode</span><span class="lang-es">Modo Avanzado</span></label>
+                </td>
+                <td><input type="checkbox" id="advanced_mode" name="advanced_mode" value="advanced_mode"
+                        onclick="show_hide_advanced_mode()" /></td>
+            </tr>
+        </table>
     </div>
     <div class="centered">
         <div>
@@ -810,6 +829,7 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     Al cifrar y firmar, necesitas considerar el orden.
                                     Veamos todas las posibilidades.
                                 </p>
+                                <div class="advanced">
                                 <h3 class="lang-en">Step 2a: (Optional) Sign a Message</h3>
                                 <h3 class="lang-es">Paso 2a: (Opcional) Firmar un Mensaje</h3>
                                 <p class="lang-en">
@@ -877,6 +897,7 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     cualquiera puede demostrar que el mensaje debe haber sido firmado por ti
                                     porque pueden descifrarlo usando <i>solo</i> tu Clave Pública.
                                 </p>
+                                </div>
                                 <h3 class="lang-en">Step 2b: Encrypt a Message</h3>
                                 <h3 class="lang-es">Paso 2b: Cifrar un Mensaje</h3>
                                 <p class="lang-en">
@@ -1000,6 +1021,7 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     Si aún no puedes leer el mensaje descifrado, puede estar firmado.
                                     Así que ve al siguiente paso.
                                 </p>
+                                <div class="advanced">
                                 <h3 class="lang-en">Step 3b: (Optional) Verify a Signature</h3>
                                 <h3 class="lang-es">Paso 3b: (Opcional) Verificar una Firma</h3>
                                 <p class="lang-en">
@@ -1061,6 +1083,7 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     firma separada adjunta al mensaje&mdash;una firma
                                     en forma de <i>cifrado</i> se ha aplicado a todo el mensaje.
                                 </p>
+                                </div>
                             </td>
                         </tr>
                     </table>
