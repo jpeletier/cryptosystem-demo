@@ -43,6 +43,18 @@ Multi-language support, translation to Spanish and and tabbed layout by Javier P
             padding-right: 2px;
         }
 
+
+        tr.underline td {
+            border-bottom: 1px solid black;
+        }
+
+
+        table.form td {
+            padding: 0.5em;
+        }
+
+
+
         span {
             font-size: 1em;
         }
@@ -531,7 +543,7 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     <input type="button" id="generate_symmetric_key" name="generate_symmetric_key"
                                         value="Generate a Symmetric Key" data-lang-en="Generate a Symmetric Key"
                                         data-lang-es="Generar una Clave Simétrica"
-                                        onclick="generate_symmetric_key_action()" /><input type="text" class="key"
+                                        onclick="generate_symmetric_key_action()" />&nbsp;<input type="text" class="key"
                                         id="generated_symmetric_key" name="generated_symmetric_key" />
                                 </center>
                                 <p class="lang-en">
@@ -571,8 +583,8 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     su <i>texto cifrado</i>.
                                 </p>
                                 <center>
-                                    <table border="0">
-                                        <tr>
+                                    <table border="0" class="form">
+                                        <tr class="underline">
                                             <td class="right"><label
                                                     for="plaintext_for_encryption_using_symmetric_key"><span
                                                         class="lang-en">Plaintext
@@ -582,25 +594,22 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                                     id="plaintext_for_encryption_using_symmetric_key"
                                                     name="plaintext_for_encryption_using_symmetric_key" /></td>
                                         </tr>
-                                        <tr>
+                                        <tr class="underline">
                                             <td class="right"><label for="symmetric_key_for_encryption"><span
                                                         class="lang-en">Symmetric
                                                         Key:</span><span class="lang-es">Clave Simétrica:</span></label>
                                             </td>
                                             <td class="left"><input type="text" class="key"
                                                     id="symmetric_key_for_encryption"
-                                                    name="symmetric_key_for_encryption" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="encrypt_using_symmetric_key"
-                                                    name="encrypt_using_symmetric_key"
+                                                    name="symmetric_key_for_encryption" />&nbsp;<input type="button"
+                                                    id="encrypt_using_symmetric_key" name="encrypt_using_symmetric_key"
                                                     value="Encrypt Using Symmetric Key"
                                                     data-lang-en="Encrypt Using Symmetric Key"
                                                     data-lang-es="Cifrar usando Clave Simétrica"
-                                                    onclick="encrypt_using_symmetric_key_action()" /></td>
+                                                    onclick="encrypt_using_symmetric_key_action()" />
+                                            </td>
                                         </tr>
+
                                         <tr>
                                             <td class="right"><label
                                                     for="ciphertext_of_encryption_using_symmetric_key"><span
@@ -644,8 +653,8 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     el botón para descifrar el texto cifrado del mensaje en texto plano.
                                 </p>
                                 <center>
-                                    <table border="0">
-                                        <tr>
+                                    <table border="0" class="form">
+                                        <tr class="underline">
                                             <td class="right"><label
                                                     for="ciphertext_for_decryption_using_symmetric_key"><span
                                                         class="lang-en">Ciphertext
@@ -655,24 +664,20 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                                     id="ciphertext_for_decryption_using_symmetric_key"
                                                     name="ciphertext_for_decryption_using_symmetric_key" /></td>
                                         </tr>
-                                        <tr>
+                                        <tr class="underline">
                                             <td class="right"><label for="symmetric_key_for_decryption"><span
                                                         class="lang-en">Symmetric
                                                         Key:</span><span class="lang-es">Clave Simétrica:</span></label>
                                             </td>
                                             <td class="left"><input type="text" class="key"
                                                     id="symmetric_key_for_decryption"
-                                                    name="symmetric_key_for_decryption" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="decrypt_using_symmetric_key"
-                                                    name="decrypt_using_symmetric_key"
+                                                    name="symmetric_key_for_decryption" />&nbsp;<input type="button"
+                                                    id="decrypt_using_symmetric_key" name="decrypt_using_symmetric_key"
                                                     value="Decrypt Using Symmetric Key"
                                                     data-lang-en="Decrypt Using Symmetric Key"
                                                     data-lang-es="Descifrar usando Clave Simétrica"
-                                                    onclick="decrypt_using_symmetric_key_action()" /></td>
+                                                    onclick="decrypt_using_symmetric_key_action()" />
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td class="right"><label
@@ -778,7 +783,8 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                                     onclick="generate_public_private_keys_action()" /></td>
                                             <td class="right"><label for="generated_public_key"><span
                                                         class="lang-en">Public
-                                                        Key:</span><span class="lang-es">Clave Pública:</span></label>
+                                                        Key:</span><span class="lang-es">Clave
+                                                        Pública:</span></label>
                                             </td>
                                             <td class="left"><input type="text" class="key" id="generated_public_key"
                                                     name="generated_public_key" /></td>
@@ -823,80 +829,81 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                 </p>
                                 <p class="lang-es">
                                     Estas claves se usan de manera diferente dependiendo de lo que quieras hacer.
-                                    Puedes <i>enviar</i> un mensaje seguro, o puedes <i>firmar</i> un mensaje. Mientras
+                                    Puedes <i>enviar</i> un mensaje seguro, o puedes <i>firmar</i> un mensaje.
+                                    Mientras
                                     decides qué clave usar para qué, recuerda lo que acabo de decir,
                                     &quot;¡<i>Nunca</i> envías tu Clave Privada a nadie!&quot;
                                     Al cifrar y firmar, necesitas considerar el orden.
                                     Veamos todas las posibilidades.
                                 </p>
                                 <div class="advanced">
-                                <h3 class="lang-en">Step 2a: (Optional) Sign a Message</h3>
-                                <h3 class="lang-es">Paso 2a: (Opcional) Firmar un Mensaje</h3>
-                                <p class="lang-en">
-                                    Before sending a message, you may want to <i>sign</i> it.
-                                    By signing a message you are proving to your recipient that the
-                                    message has come from you. You sign plaintext by
-                                    encrypting it using <i>your</i> Private Key.
-                                </p>
-                                <p class="lang-es">
-                                    Antes de enviar un mensaje, es posible que desees <i>firmarlo</i>.
-                                    Al firmar un mensaje, estás demostrando a tu destinatario que el
-                                    mensaje proviene de ti. Firmas el texto plano
-                                    cifrándolo usando <i>tu</i> Clave Privada.
-                                </p>
-                                <center>
-                                    <table border="0">
-                                        <tr>
-                                            <td class="right"><label for="plaintext_to_be_signed"><span
-                                                        class="lang-en">Plaintext:</span><span class="lang-es">Texto
-                                                        plano:</span></label></td>
-                                            <td class="left"><input type="text" class="message"
-                                                    id="plaintext_to_be_signed" name="plaintext_to_be_signed" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="right"><label for="private_key_to_sign_message"><span
-                                                        class="lang-en">Sender's Private
-                                                        Key:</span><span class="lang-es">Clave Privada del
-                                                        Remitente:</span></label></td>
-                                            <td class="left"><input type="text" class="key"
-                                                    id="private_key_to_sign_message"
-                                                    name="private_key_to_sign_message" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="sign_message" name="sign_message"
-                                                    value="Encrypt Using Sender's Private Key"
-                                                    data-lang-en="Encrypt Using Sender's Private Key"
-                                                    data-lang-es="Cifrar usando Clave Privada del Remitente"
-                                                    onclick="encrypt_using_your_private_key()" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="right"><label for="signed_message"><span class="lang-en">Signed
-                                                        Message:</span><span class="lang-es">Mensaje
-                                                        firmado:</span></label>
-                                            </td>
-                                            <td class="left"><input type="text" class="message" id="signed_message"
-                                                    name="signed_message" /></td>
-                                        </tr>
-                                    </table>
-                                </center>
-                                <p class="lang-en">
-                                    How is this secure? <i>Anyone</i> can get your Public Key and decrypt the
-                                    ciphertext! Yes, and that's the point. Signing a message does not
-                                    <i>protect</i> it.
-                                    After you <i>sign</i> a message with your Private Key,
-                                    anyone can show that the message must have been signed by you
-                                    because they can decrypt it using <i>only</i> your Public Key.
-                                </p>
-                                <p class="lang-es">
-                                    ¿Cómo es esto seguro? ¡<i>Cualquiera</i> puede obtener tu Clave Pública y descifrar
-                                    el
-                                    texto cifrado! Sí, y esa es la idea. Firmar un mensaje no
-                                    lo <i>protege</i>.
-                                    Después de que <i>firmes</i> un mensaje con tu Clave Privada,
-                                    cualquiera puede demostrar que el mensaje debe haber sido firmado por ti
-                                    porque pueden descifrarlo usando <i>solo</i> tu Clave Pública.
-                                </p>
+                                    <h3 class="lang-en">Step 2a: (Optional) Sign a Message</h3>
+                                    <h3 class="lang-es">Paso 2a: (Opcional) Firmar un Mensaje</h3>
+                                    <p class="lang-en">
+                                        Before sending a message, you may want to <i>sign</i> it.
+                                        By signing a message you are proving to your recipient that the
+                                        message has come from you. You sign plaintext by
+                                        encrypting it using <i>your</i> Private Key.
+                                    </p>
+                                    <p class="lang-es">
+                                        Antes de enviar un mensaje, es posible que desees <i>firmarlo</i>.
+                                        Al firmar un mensaje, estás demostrando a tu destinatario que el
+                                        mensaje proviene de ti. Firmas el texto plano
+                                        cifrándolo usando <i>tu</i> Clave Privada.
+                                    </p>
+                                    <center>
+                                        <table border="0" class="form">
+                                            <tr class="underline">
+                                                <td class="right"><label for="plaintext_to_be_signed"><span
+                                                            class="lang-en">Plaintext:</span><span class="lang-es">Texto
+                                                            plano:</span></label></td>
+                                                <td class="left"><input type="text" class="message"
+                                                        id="plaintext_to_be_signed" name="plaintext_to_be_signed" />
+                                                </td>
+                                            </tr>
+                                            <tr class="underline">
+                                                <td class="right"><label for="private_key_to_sign_message"><span
+                                                            class="lang-en">Sender's Private
+                                                            Key:</span><span class="lang-es">Clave Privada del
+                                                            Remitente:</span></label></td>
+                                                <td class="left"><input type="text" class="key"
+                                                        id="private_key_to_sign_message"
+                                                        name="private_key_to_sign_message" />&nbsp;<input type="button"
+                                                        id="sign_message" name="sign_message"
+                                                        value="Encrypt Using Sender's Private Key"
+                                                        data-lang-en="Encrypt Using Sender's Private Key"
+                                                        data-lang-es="Cifrar usando Clave Privada del Remitente"
+                                                        onclick="encrypt_using_your_private_key()" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="right"><label for="signed_message"><span
+                                                            class="lang-en">Signed
+                                                            Message:</span><span class="lang-es">Mensaje
+                                                            firmado:</span></label>
+                                                </td>
+                                                <td class="left"><input type="text" class="message" id="signed_message"
+                                                        name="signed_message" /></td>
+                                            </tr>
+                                        </table>
+                                    </center>
+                                    <p class="lang-en">
+                                        How is this secure? <i>Anyone</i> can get your Public Key and decrypt the
+                                        ciphertext! Yes, and that's the point. Signing a message does not
+                                        <i>protect</i> it.
+                                        After you <i>sign</i> a message with your Private Key,
+                                        anyone can show that the message must have been signed by you
+                                        because they can decrypt it using <i>only</i> your Public Key.
+                                    </p>
+                                    <p class="lang-es">
+                                        ¿Cómo es esto seguro? ¡<i>Cualquiera</i> puede obtener tu Clave Pública y
+                                        descifrar
+                                        el
+                                        texto cifrado! Sí, y esa es la idea. Firmar un mensaje no
+                                        lo <i>protege</i>.
+                                        Después de que <i>firmes</i> un mensaje con tu Clave Privada,
+                                        cualquiera puede demostrar que el mensaje debe haber sido firmado por ti
+                                        porque pueden descifrarlo usando <i>solo</i> tu Clave Pública.
+                                    </p>
                                 </div>
                                 <h3 class="lang-en">Step 2b: Encrypt a Message</h3>
                                 <h3 class="lang-es">Paso 2b: Cifrar un Mensaje</h3>
@@ -915,8 +922,8 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     correspondiente.
                                 </p>
                                 <center>
-                                    <table border="0">
-                                        <tr>
+                                    <table border="0" class="form">
+                                        <tr class="underline">
                                             <td class="right"><label for="plaintext_to_be_encrypted"><span
                                                         class="lang-en">Plaintext
                                                         or Signed Message:</span><span class="lang-es">Texto plano o
@@ -926,19 +933,16 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                                     id="plaintext_to_be_encrypted" name="plaintext_to_be_encrypted" />
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="underline">
                                             <td class="right"><label for="public_key_to_encrypt_message"><span
                                                         class="lang-en">Recipient's Public
                                                         Key:</span><span class="lang-es">Clave Pública del
                                                         Destinatario:</span></label></td>
                                             <td class="left"><input type="text" class="key"
                                                     id="public_key_to_encrypt_message"
-                                                    name="public_key_to_encrypt_message" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="encrypt_message"
-                                                    name="encrypt_message" value="Encrypt Using Recipient's Public Key"
+                                                    name="public_key_to_encrypt_message" />&nbsp;<input type="button"
+                                                    id="encrypt_message" name="encrypt_message"
+                                                    value="Encrypt Using Recipient's Public Key"
                                                     data-lang-en="Encrypt Using Recipient's Public Key"
                                                     data-lang-es="Cifrar usando Clave Pública del Destinatario"
                                                     onclick="encrypt_using_recipient_public_key()" /></td>
@@ -977,27 +981,25 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                     <i>Clave Privada</i>.
                                 </p>
                                 <center>
-                                    <table border="0">
-                                        <tr>
+                                    <table border="0" class="form">
+                                        <tr class="underline">
                                             <td class="right"><label for="message_to_be_decrypted"><span
                                                         class="lang-en">Ciphertext:</span><span class="lang-es">Texto
                                                         cifrado:</span></label></td>
                                             <td class="left"><input type="text" class="message"
-                                                    id="message_to_be_decrypted" name="message_to_be_decrypted" /></td>
+                                                    id="message_to_be_decrypted" name="message_to_be_decrypted" />
+                                            </td>
                                         </tr>
-                                        <tr>
+                                        <tr class="underline">
                                             <td class="right"><label for="private_key_to_decrypt_message"><span
                                                         class="lang-en">Recipient's Private
                                                         Key:</span><span class="lang-es">Clave Privada del
                                                         Destinatario:</span></label></td>
                                             <td class="left"><input type="text" class="key"
                                                     id="private_key_to_decrypt_message"
-                                                    name="private_key_to_decrypt_message" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="decrypt_message"
-                                                    name="decrypt_message" value="Decrypt Using Recipient's Private Key"
+                                                    name="private_key_to_decrypt_message" />&nbsp;<input type="button"
+                                                    id="decrypt_message" name="decrypt_message"
+                                                    value="Decrypt Using Recipient's Private Key"
                                                     data-lang-en="Decrypt Using Recipient's Private Key"
                                                     data-lang-es="Descifrar usando Clave Privada del Destinatario"
                                                     onclick="decrypt_using_your_private_key()" /></td>
@@ -1015,74 +1017,72 @@ text-align: center; margin-left: auto; margin-right: auto;">Javascript is
                                 </center>
                                 <p class="lang-en">
                                     If you still can't read the decrypted message, it may be signed.
-                                    So go to the next step.
+                                    So go to the next step (enable advanced mode).
                                 </p>
                                 <p class="lang-es">
                                     Si aún no puedes leer el mensaje descifrado, puede estar firmado.
-                                    Así que ve al siguiente paso.
+                                    Así que ve al siguiente paso (activa el modo avanzado).
                                 </p>
                                 <div class="advanced">
-                                <h3 class="lang-en">Step 3b: (Optional) Verify a Signature</h3>
-                                <h3 class="lang-es">Paso 3b: (Opcional) Verificar una Firma</h3>
-                                <p class="lang-en">
-                                    Someone claims that they have sent you a message? Confirm their
-                                    signature by decrypting the message using <i>their</i> Public Key.
-                                </p>
-                                <p class="lang-es">
-                                    ¿Alguien afirma que te ha enviado un mensaje? Confirma su
-                                    firma descifrando el mensaje usando la <i>Clave Pública</i> de esa persona.
-                                </p>
-                                <center>
-                                    <table border="0">
-                                        <tr>
-                                            <td class="right"><label for="message_to_be_verified"><span
-                                                        class="lang-en">Signed Message:</span><span
-                                                        class="lang-es">Mensaje
-                                                        firmado:</span></label>
-                                            </td>
-                                            <td class="left"><input type="text" class="message"
-                                                    id="message_to_be_verified" name="message_to_be_verified" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="right"><label for="public_key_to_verify_signature"><span
-                                                        class="lang-en">Sender's Public
-                                                        Key:</span><span class="lang-es">Clave Pública del
-                                                        Remitente:</span></label></td>
-                                            <td class="left"><input type="text" class="key"
-                                                    id="public_key_to_verify_signature"
-                                                    name="public_key_to_verify_signature" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td>&nbsp;</td>
-                                            <td class="left"><input type="button" id="verify_signature"
-                                                    name="verify_signature" value="Decrypt Using Sender's Public Key"
-                                                    data-lang-en="Decrypt Using Sender's Public Key"
-                                                    data-lang-es="Descifrar usando Clave Pública del Remitente"
-                                                    onclick="verify_using_sender_public_key()" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="right"><label for="verified_message"><span
-                                                        class="lang-en">Plaintext:</span><span class="lang-es">Texto
-                                                        plano:</span></label></td>
-                                            <td class="left"><input type="text" class="message" id="verified_message"
-                                                    name="verified_message" /></td>
-                                        </tr>
-                                    </table>
-                                </center>
-                                <p class="lang-en">
-                                    Realize that when we say we &quot;verify a signature,&quot;
-                                    really we are removing a
-                                    layer of encryption from the entire message. There is no
-                                    separate signature appended to the message&mdash;a signature
-                                    in the form of <i>encryption</i> has been applied to the entire message.
-                                </p>
-                                <p class="lang-es">
-                                    Date cuenta de que cuando decimos que &quot;verificamos una firma,&quot;
-                                    realmente estamos eliminando una
-                                    capa de cifrado de todo el mensaje. No hay una
-                                    firma separada adjunta al mensaje&mdash;una firma
-                                    en forma de <i>cifrado</i> se ha aplicado a todo el mensaje.
-                                </p>
+                                    <h3 class="lang-en">Step 3b: (Optional) Verify a Signature</h3>
+                                    <h3 class="lang-es">Paso 3b: (Opcional) Verificar una Firma</h3>
+                                    <p class="lang-en">
+                                        Someone claims that they have sent you a message? Confirm their
+                                        signature by decrypting the message using <i>their</i> Public Key.
+                                    </p>
+                                    <p class="lang-es">
+                                        ¿Alguien afirma que te ha enviado un mensaje? Confirma su
+                                        firma descifrando el mensaje usando la <i>Clave Pública</i> de esa persona.
+                                    </p>
+                                    <center>
+                                        <table border="0" class="form">
+                                            <tr class="underline">
+                                                <td class="right"><label for="message_to_be_verified"><span
+                                                            class="lang-en">Signed Message:</span><span
+                                                            class="lang-es">Mensaje
+                                                            firmado:</span></label>
+                                                </td>
+                                                <td class="left"><input type="text" class="message"
+                                                        id="message_to_be_verified" name="message_to_be_verified" />
+                                                </td>
+                                            </tr>
+                                            <tr class="underline">
+                                                <td class="right"><label for="public_key_to_verify_signature"><span
+                                                            class="lang-en">Sender's Public
+                                                            Key:</span><span class="lang-es">Clave Pública del
+                                                            Remitente:</span></label></td>
+                                                <td class="left"><input type="text" class="key"
+                                                        id="public_key_to_verify_signature"
+                                                        name="public_key_to_verify_signature" />&nbsp;<input
+                                                        type="button" id="verify_signature" name="verify_signature"
+                                                        value="Decrypt Using Sender's Public Key"
+                                                        data-lang-en="Decrypt Using Sender's Public Key"
+                                                        data-lang-es="Descifrar usando Clave Pública del Remitente"
+                                                        onclick="verify_using_sender_public_key()" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="right"><label for="verified_message"><span
+                                                            class="lang-en">Plaintext:</span><span class="lang-es">Texto
+                                                            plano:</span></label></td>
+                                                <td class="left"><input type="text" class="message"
+                                                        id="verified_message" name="verified_message" /></td>
+                                            </tr>
+                                        </table>
+                                    </center>
+                                    <p class="lang-en">
+                                        Realize that when we say we &quot;verify a signature,&quot;
+                                        really we are removing a
+                                        layer of encryption from the entire message. There is no
+                                        separate signature appended to the message&mdash;a signature
+                                        in the form of <i>encryption</i> has been applied to the entire message.
+                                    </p>
+                                    <p class="lang-es">
+                                        Date cuenta de que cuando decimos que &quot;verificamos una firma,&quot;
+                                        realmente estamos eliminando una
+                                        capa de cifrado de todo el mensaje. No hay una
+                                        firma separada adjunta al mensaje&mdash;una firma
+                                        en forma de <i>cifrado</i> se ha aplicado a todo el mensaje.
+                                    </p>
                                 </div>
                             </td>
                         </tr>
